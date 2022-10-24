@@ -118,6 +118,7 @@ public class GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.changeMode(1);
+				System.out.println(board.getMode());
 			}
 		});
 		
@@ -125,6 +126,7 @@ public class GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.changeMode(0);
+				System.out.println(board.getMode());
 			}
 		});
 		
@@ -137,6 +139,7 @@ public class GUI extends JFrame {
 				Integer newSize = Integer.parseInt(sizeSelect.getText()); 
 				board.setBoardSize(newSize);
 				updateBoardSize();
+				repaint();
 			}
 		});
 		

@@ -1,5 +1,7 @@
 package application;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,14 @@ public class JunitTests {
 		assertEquals(6, test_board.getRows());
 	}
 	
+	@Test
+	public void invalidBoard() {
+		test_board.setBoardSize(10);
+		
+		assertFalse(test_board.getRows() == 10);
+		assertFalse(test_board.getCols() == 10);
+	}
+	
 // TEST TO MAKE SURE THE INITIAL BOARD IS EMPTY
 	@Test
 	public void testInit() {
@@ -67,6 +77,4 @@ public class JunitTests {
 		
 		assertEquals((Cell.O), (test_board2.getCell(3, 6)));
 	}
-	
-
 }

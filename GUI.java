@@ -26,13 +26,15 @@ public class GUI extends JFrame {
 
 	private GameBoardCanvas gameBoardCanvas;
 	private JLabel gameStatusBar;  
-
 	private Board board;
+	private JRadioButton r1;
+	private JRadioButton r2;
 	private JRadioButton s1Btn;
 	private JRadioButton o1Btn;
 	private JRadioButton s2Btn;
 	private JRadioButton o2Btn;
-	private int turnCounter = 0; //Int used to determined which players turn it is
+	private JTextField sizeSelect; 
+	//private int turnCounter = 2; //Int used to determined which players turn it is
 	
 
 	public GUI(Board board) {
@@ -45,20 +47,28 @@ public class GUI extends JFrame {
 	}
 	
 //	update the board size
-	private void updateBoardSize() {
+	private void updateBoardSize() {  
 		CANVAS_WIDTH = CELL_SIZE * board.getRows();  
 		CANVAS_HEIGHT = CELL_SIZE * board.getCols();
+		
 		repaint();
 	}
 	
+//	public int getTurnCount() {
+//		return turnCounter;
+//	}
+	
+//	public void resetTurnCount() {
+//		turnCounter = 2;
+//	}
+	
 	private void setContentPane() {
-		gameBoardCanvas = new GameBoardCanvas();  
+		gameBoardCanvas = new GameBoardCanvas();
 		CANVAS_WIDTH = CELL_SIZE * board.getRows();  
 		CANVAS_HEIGHT = CELL_SIZE * board.getCols();
-
 		gameBoardCanvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
 		
-		gameStatusBar = new JLabel(" ");
+		gameStatusBar = new JLabel("Select a gamemode then select the board size to start a game. ");
 		gameStatusBar.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 15));
 		gameStatusBar.setBorder(BorderFactory.createEmptyBorder(2, 5, 4, 5));
 		
@@ -99,11 +109,9 @@ public class GUI extends JFrame {
 		playerPanel.add(pl1, BorderLayout.NORTH);
 		playerPanel.add(pl2, BorderLayout.SOUTH);
 		
-		
-		
 //		CONTENT FOR GAME MODE
-		JRadioButton r1=new JRadioButton("Simple Game");    
-		JRadioButton r2=new JRadioButton("General Game");    
+		r1=new JRadioButton("Simple Game");    
+		r2=new JRadioButton("General Game");    
 		r1.setBounds(75,50,100,30);    
 		r2.setBounds(75,200,100,30);    
 		ButtonGroup bg=new ButtonGroup();
@@ -117,27 +125,40 @@ public class GUI extends JFrame {
 		r2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				board.changeMode(1);
-				System.out.println(board.getMode());
+				board.setMode(1);
+				r1.setVisible(false);
+				sizeSelect.setEditable(true);
+				//board.clearBoard();
+				board.resetMoveCount();
+				System.out.println(board.getMode()); 
 			}
 		});
 		
 		r1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				board.changeMode(0);
+				board.setMode(0);
+				r2.setVisible(false);
+				sizeSelect.setEditable(true);
+				//board.clearBoard();
+				board.resetMoveCount();
 				System.out.println(board.getMode());
 			}
 		});
-		
+
 //		CONTENT FOR BOARD SELECTION
 		JLabel sizeSelectText = new JLabel("Board Size");		
-		JTextField sizeSelect = new JTextField();
+		sizeSelect = new JTextField();
+		sizeSelect.setEditable(false);
 		sizeSelect.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Integer newSize = Integer.parseInt(sizeSelect.getText()); 
 				board.setBoardSize(newSize);
+				//board.clearBoard();
+				board.resetMoveCount();
+				sizeSelect.setEditable(false);
+				gameStatusBar.setText("Player 1 turn. ");
 				updateBoardSize();
 				repaint();
 			}
@@ -167,28 +188,34 @@ public class GUI extends JFrame {
 						int colSelected = e.getX() / CELL_SIZE;
 						/*
 						 * player turn is determined by the turnCounter.
-						 * if the turnCounter is even, Player 1 goes,
-						 * if the turnCounter is odd, Player 2 goes.
+						 * if the moveCounter is even, Player 1 goes,
+						 * if the moveCounter is odd, Player 2 goes.
 						 */
-						if (turnCounter % 2 == 0) {
+						if (board.getMoveCount() % 2 == 0) {
 							if (s1Btn.isSelected()) {
 								board.makeSMove(rowSelected, colSelected);
-								turnCounter++;
+								board.checkGameState();
+								board.moveCountInc();
 							}
 							else {
 								board.makeOMove(rowSelected, colSelected);
-								turnCounter++;
+								board.checkGameState();
+								board.moveCountInc();
 							}
+							gameStatusBar.setText("Player 2 turn.");
 						}
 						else {
 							if (s2Btn.isSelected()) {
 								board.makeSMove(rowSelected, colSelected);
-								turnCounter++;
+								board.checkGameState();
+								board.moveCountInc();
 							}
 							else {
 								board.makeOMove(rowSelected, colSelected);
-								turnCounter++;
+								board.checkGameState();
+								board.moveCountInc();
 							}
+							gameStatusBar.setText("Player 1 turn.");
 						}
 					repaint();
 				}
@@ -205,15 +232,14 @@ public class GUI extends JFrame {
 		
 		private void drawGridLines(Graphics g){
 			g.setColor(Color.LIGHT_GRAY);
-			for (int row = 1; row < board.getRows(); ++row) {
+			for (int row = 0; row < board.getRows() + 1; ++row) {
 				g.fillRoundRect(0, CELL_SIZE * row - GRID_WIDTH_HALF,
 						CANVAS_WIDTH-1, GRID_WIDTH, GRID_WIDTH, GRID_WIDTH);
 			}
-			for (int col = 1; col < board.getCols(); ++col) {
+			for (int col = 0; col < board.getCols() + 1; ++col) {
 				g.fillRoundRect(CELL_SIZE * col - GRID_WIDTH_HALF, 0,
 						GRID_WIDTH, CANVAS_HEIGHT-1, GRID_WIDTH, GRID_WIDTH);
 			}
-
 		}
 
 		private void drawBoard(Graphics g){

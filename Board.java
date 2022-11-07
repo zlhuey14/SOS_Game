@@ -7,9 +7,7 @@ public class Board {
 	private int gameMode = 0; //	0 = Simple Game, 1 = General Game
 	private Cell[][] grid;
 	private char turn;
-	private int moveCounter = 0;
-	private int SOSCount1;
-	private int SOSCount2;
+	private int moveCounter;
 	
 	public Board() {
 		grid = new Cell[TOTALROWS][TOTALCOLS];
@@ -92,7 +90,6 @@ public class Board {
 		}
 		turn = 'S';
 	}
-	
 
 	public void makeOMove(int row, int col) {
 		if(isValidMove(row,col) && grid[row][col] == Cell.EMPTY) {
@@ -111,43 +108,50 @@ public class Board {
 		return false;
 	}
 	
-	public void checkGameState() {
-		if (getMode() == 0) {
-			//game logic here to check for an SOS in a SIMPLE GAME
-			//Need to check if Player 1 or Player 2 completed the SOS
-			//End the game on the first SOS
-			if (SOSCheck() && (moveCounter % 2 == 0)) {
-				System.out.println("Player 1 wins.");
-				//insert a method to end the game
-			}
-			else if (SOSCheck() && !(moveCounter % 2 == 0)) {
-				System.out.println("Player 2 wins.");
-				//insert a method to end the game.
-			}
-			else if (!(SOSCheck()) && checkIfFull()) {
-				System.out.println("Game Draw.");
-			}
-		}
-		
-		if (getMode() == 1) {
-			//game logic here to check for an SOS in a GENERAL GAME
-			//Need to check if Player 1 or Player 2 completed the SOS
-			//Award a point to a player if they complete an SOS
-			if (getMoveCount() % 2 == 0) {
-				SOSCount1++;
-			}
-			else {
-				SOSCount2++;
-			}
-		}
-	}
-	
-	public boolean SOSCheck() {
+	public boolean sgSOSCheck() {
 		boolean temp = false;
 		if (vertCheck() || horCheck() || diagCheckRD() || diagCheckLD()) {
 			temp = true;
 		}
 		return temp;
+	}
+	
+	/*
+	public boolean sgSOSCheck(int row, int col) {
+		boolean temp = false;
+		if (vertCheck2(row, col) 
+				|| horCheck2(row,col) 
+				|| checkLeftAscend(row,col)
+				|| checkLeftDescend(row,col)
+				|| checkRightAscend(row,col)
+				|| checkRightDescend(row,col)) {
+			temp = true;	
+		}
+		return temp;
+	}
+	*/
+	public int ggSOSCheck(int row, int col) {
+		int points = 0;
+		if (vertCheck2(row, col)) {
+			points = points + 1;
+		}
+		if (horCheck2(row,col)) {
+			points = points + 1;
+		}
+		if (checkLeftAscend(row,col)) {
+			points = points + 1;
+		}
+		if (checkLeftDescend(row,col)) {
+			points = points + 1;
+		}
+		if (checkRightAscend(row,col)) {
+			points = points + 1;
+		}
+		if (checkRightDescend(row,col)) {
+			points = points + 1;
+		}
+		System.out.println(points);
+		return points;
 	}
 	
 	public boolean vertCheck() {
@@ -159,10 +163,20 @@ public class Board {
 				}	
 			}
 		}
-		//System.out.println("Vertical Detect: " + temp);
 		return temp;
 	}
 	
+	public boolean vertCheck2(int row, int col) {
+		boolean temp = false;
+		if (row > TOTALROWS - 3) {
+			row = TOTALROWS -3;
+		}
+		if ((grid[row][col] == Cell.S) && (grid[row+1][col] == Cell.O) && (grid[row+2][col] == Cell.S)) {
+			temp = true;
+		}
+		return temp;
+	}
+
 	public boolean horCheck() {
 		boolean temp = false;
 		for (int row = 0; row < TOTALROWS; row++) {
@@ -172,10 +186,20 @@ public class Board {
 				}	
 			}
 		}
-		//System.out.println("Horizontal Detect: " + temp);
 		return temp;
 	}
 	
+	public boolean horCheck2(int row, int col) {
+		boolean temp = false;
+		if (col > TOTALCOLS - 3) {
+			col = TOTALCOLS - 3;
+		}
+		if ((grid[row][col] == Cell.S) && (grid[row][col+1] == Cell.O) && (grid[row][col+2] == Cell.S)) {
+			temp = true;
+		}
+		return temp;
+	}
+
 	public boolean diagCheckRD() {
 		boolean temp = false;
 		for (int row = 0; row < TOTALROWS - 2; row++) {
@@ -185,9 +209,44 @@ public class Board {
 				}	
 			}
 		}
-		//System.out.println("Right Diagonal Check: " + temp);
 		return temp;
 		
+	}
+	
+	//STILL WORKING ON MAKING A BETTER DIAGONAL CHECK
+	//THIS STILL NEEDS TO BE FINISHED 
+	public boolean checkLeftAscend(int row, int col) {
+		boolean temp = false;
+		int limit = 2;
+		/*
+		 * Since im checking the two spaces previous from the placed piece,
+		 * if 'row' or 'col' - 2 is less than the lower limit of the board
+		 * (i.e. 0), then I don't want to run the check so that an invalid
+		 * board space is not attempted to be accessed.
+		 */
+		if (row - limit < 0 || col - limit < 0) {
+			temp = false;
+		}
+		else {
+			if ((grid[row][col] == Cell.S) && (grid[row-1][col-1] == Cell.O) && (grid[row-2][col-2] == Cell.S)) {
+				temp = true;
+			}
+		}
+		return temp;
+	}
+	
+	public boolean checkLeftDescend(int row, int col) {
+		boolean temp = false;
+		int limit = 2;
+		if (row + limit > TOTALROWS || col + limit > TOTALCOLS) {
+			temp = false;
+		}
+		else {
+			if ((grid[row][col] == Cell.S) && (grid[row+1][col+1] == Cell.O) && (grid[row+2][col+2] == Cell.S)) {
+				temp = true;
+			}
+		}
+		return temp;
 	}
 	
 	public boolean diagCheckLD () {
@@ -199,7 +258,34 @@ public class Board {
 				}	
 			}
 		}
-		//System.out.println("Left Diagonal Check: " + temp);
+		return temp;
+	}
+	
+	public boolean checkRightAscend(int row, int col) {
+		boolean temp = false;
+		int limit = 2;
+		if (row - limit < 0 || col + limit > TOTALCOLS) {
+			temp = false;
+		}
+		else {
+			if ((grid[row][col] == Cell.S) && (grid[row-1][col+1] == Cell.O) && (grid[row-2][col+2] == Cell.S)) {
+				temp = true;
+			}	
+		}
+		return temp;
+	}
+	
+	public boolean checkRightDescend(int row, int col) {
+		boolean temp = false;
+		int limit = 2;
+		if (row + limit > TOTALROWS || col - limit < 0) {
+			temp = false;
+		}
+		else {
+			if ((grid[row][col] == Cell.S) && (grid[row+1][col-1] == Cell.O) && (grid[row+2][col-2] == Cell.S)) {
+				temp = true;
+			}	
+		}
 		return temp;
 	}
 	
@@ -216,6 +302,7 @@ public class Board {
 				}
 			}
 		}
+		System.out.println("checkIfFull = " + temp);
 		return temp;
 	}
 }

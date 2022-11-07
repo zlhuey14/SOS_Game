@@ -92,6 +92,18 @@ public class JunitTests {
 		assertEquals(true, board.vertCheck());
 	}
 	
+	@Test
+	public void simpleGameSOS() {
+		Board board = new Board();
+		board.setBoardSize(4);
+		board.setMode(0);
+		board.makeSMove(0, 0);
+		board.makeOMove(0, 1);
+		board.makeSMove(0, 2);
+		
+		assertEquals(true, board.sgSOSCheck());
+	}
+	
 // Test to check and make sure that the checkIfFull() method properly returns true when the board is full
 	@Test
 	public void boardFullTest() {
@@ -119,5 +131,92 @@ public class JunitTests {
 		board.makeOMove(2, 0);
 		
 		assertEquals(false, board.checkIfFull());
+	}
+	
+	@Test
+	public void ggHorCheck() {
+		Board board = new Board();
+		board.setBoardSize(6);
+		board.makeSMove(0, 3);
+		board.makeOMove(0, 4);
+		board.makeSMove(0, 5);
+		
+		assertEquals(true, board.horCheck2(0, 4));
+		
+	}
+	
+	@Test
+	public void ggVertCheck() {
+		Board board = new Board();
+		board.setBoardSize(7);
+		board.makeSMove(4,2);
+		assertEquals(false, board.vertCheck2(4,2));
+		board.makeOMove(5, 2);
+		assertEquals(false, board.vertCheck2(5,2));
+		board.makeSMove(6, 2);
+		assertEquals(true, board.vertCheck2(6, 2));
+	}
+	
+	@Test
+	public void ggVertCheckReverse() {
+		Board board = new Board();
+		board.setBoardSize(7);
+		board.makeSMove(6, 2);
+		assertEquals(false, board.vertCheck2(6, 2));
+		board.makeOMove(5, 2);
+		assertEquals(false, board.vertCheck2(5, 2));
+		board.makeSMove(4,2);
+		assertEquals(true, board.vertCheck2(4,2));
+	}
+	
+	@Test
+	public void ggCheckLeftAscend() {
+		Board board = new Board();
+		board.setBoardSize(3);
+		board.makeSMove(0, 0);
+		assertEquals(false, board.checkLeftAscend(0,0));
+		board.makeOMove(1, 1);
+		assertEquals(false, board.checkLeftAscend(1, 1));
+		board.makeSMove(2, 2);
+		assertEquals(true, board.checkLeftAscend(2, 2));
+		
+	}
+	
+	@Test
+	public void ggCheckLeftDescend() {
+		Board board = new Board();
+		board.setBoardSize(3);
+		board.makeSMove(2, 2);
+		assertEquals(false,board.checkLeftDescend(2, 2));
+		board.makeOMove(1, 1);
+		assertEquals(false, board.checkLeftDescend(1, 1));
+		board.makeSMove(0, 0);
+		assertEquals(true, board.checkLeftDescend(0, 0));
+	}
+	
+	@Test
+	public void ggCheckRightAscend() {
+		Board board = new Board();
+		board.setBoardSize(3);
+		board.makeSMove(0, 2);
+		assertEquals(false, board.checkRightAscend(0, 2));
+		board.makeOMove(1, 1);
+		assertEquals(false, board.checkRightAscend(1, 1));
+		board.makeSMove(2, 0);
+		assertEquals(true, board.checkRightAscend(2, 0));
+		
+	}
+	
+	@Test
+	public void ggCheckRightDescend() {
+		Board board = new Board();
+		board.setBoardSize(3);
+		board.makeSMove(2, 0);
+		assertEquals(false, board.checkRightDescend(2, 0));
+		board.makeOMove(1, 1);
+		assertEquals(false, board.checkRightDescend(1, 1));
+		board.makeSMove(0, 2);
+		assertEquals(true, board.checkRightDescend(0, 2));
+		
 	}
 }

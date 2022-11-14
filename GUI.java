@@ -31,8 +31,12 @@ public class GUI extends JFrame {
 	private JRadioButton r2;
 	private JRadioButton s1Btn;
 	private JRadioButton o1Btn;
+	private JRadioButton humOne;
+	private JRadioButton comOne;
 	private JRadioButton s2Btn;
 	private JRadioButton o2Btn;
+	private JRadioButton humTwo;
+	private JRadioButton comTwo;
 	private JTextField sizeSelect;
 	private JLabel pl1Score;
 	private JLabel pl2Score;
@@ -94,34 +98,62 @@ public class GUI extends JFrame {
 		
 //		PLAYER 1 CONTROL PANEL			
 		JPanel pl1 = new JPanel();
+		pl1.setPreferredSize(new Dimension(200,100));
 		playerPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		
+		JPanel pl1Details = new JPanel();
 		JLabel pl1Text = new JLabel("Player 1: ");
 		pl1Score = new JLabel ("Score: " + p1Points);
+		pl1Details.add(pl1Text);
+		pl1Details.add(pl1Score);
 		pl1Score.setVisible(false);
+		
 		ButtonGroup pl1Controls = new ButtonGroup();
 		s1Btn = new JRadioButton("S");
 		o1Btn = new JRadioButton("O");
 		pl1Controls.add(s1Btn); //Adding the button to the button group
 		pl1Controls.add(o1Btn); //Adding the button to the button group
-		pl1.add(pl1Text);
+		
+		ButtonGroup player1Type = new ButtonGroup();
+		humOne = new JRadioButton("Human");
+		comOne = new JRadioButton("Computer");
+		player1Type.add(humOne);
+		player1Type.add(comOne);
+
+		pl1.add(pl1Details);
 		pl1.add(s1Btn);
 		pl1.add(o1Btn);
-		pl1.add(pl1Score);
+		pl1.add(humOne);
+		pl1.add(comOne);
 		
 //		PLAYER 2 CONTROL PANEL		
 		JPanel pl2 = new JPanel();
+		pl2.setPreferredSize(new Dimension(200,150));
+		
+		JPanel pl2Details = new JPanel();
 		JLabel pl2Text = new JLabel("Player 2: ");
 		pl2Score = new JLabel("Score: " + p2Points);
+		pl2Details.add(pl2Text);
+		pl2Details.add(pl2Score);
 		pl2Score.setVisible(false);
+		
 		ButtonGroup pl2Controls = new ButtonGroup();
 		s2Btn = new JRadioButton("S");
 		o2Btn = new JRadioButton("O");
 		pl2Controls.add(s2Btn); //Adding the button to the button group
 		pl2Controls.add(o2Btn); //Adding the button to the button group
-		pl2.add(pl2Text);
+		
+		ButtonGroup player2Type = new ButtonGroup();
+		humTwo = new JRadioButton("Human");
+		comTwo = new JRadioButton("Computer");
+		player2Type.add(humTwo);
+		player2Type.add(comTwo);
+		
+		pl2.add(pl2Details);
 		pl2.add(s2Btn);
 		pl2.add(o2Btn);
-		pl2.add(pl2Score);
+		pl2.add(humTwo);
+		pl2.add(comTwo);
 		
 		
 //		ADDING THE PLAYER 1 AND 2 CONTROL PANELS TO THE MAIN PLAYER CONTROL PANEL
@@ -149,7 +181,6 @@ public class GUI extends JFrame {
 				pl1Score.setVisible(true);
 				pl2Score.setVisible(true);
 				sizeSelect.setEditable(true);
-				//board.clearBoard();
 				board.resetMoveCount();
 				System.out.println(board.getMode()); 
 			}
@@ -161,7 +192,6 @@ public class GUI extends JFrame {
 				board.setMode(0);
 				r2.setVisible(false);
 				sizeSelect.setEditable(true);
-				//board.clearBoard();
 				board.resetMoveCount();
 				System.out.println(board.getMode());
 			}
@@ -176,7 +206,6 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Integer newSize = Integer.parseInt(sizeSelect.getText()); 
 				board.setBoardSize(newSize);
-				//board.clearBoard();
 				board.resetMoveCount();
 				sizeSelect.setEditable(false);
 				gameStatusBar.setText("Player 1 turn. ");
@@ -213,59 +242,99 @@ public class GUI extends JFrame {
 						 * if the moveCounter is odd, Player 2 goes.
 						 */
 						if (board.getMoveCount() % 2 == 0) {
-							if (s1Btn.isSelected()) {
-								board.makeSMove(rowSelected, colSelected);
-								if (board.getMode() == 0) {
-									if (board.sgSOSCheck()) {
-										gameStatusBar.setText("Player 1 wins.");
-									}
-									else if (!(board.checkIfFull() && board.sgSOSCheck())) {
-										gameStatusBar.setText("Player 2 turn.");
-									}
+							if (humOne.isSelected()) {
+								if (s1Btn.isSelected()) {
+									board.makeSMove(rowSelected, colSelected);
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck()) {
+											gameStatusBar.setText("Player 1 wins.");
+										}
+										else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+											gameStatusBar.setText("Player 2 turn.");
+										}
 									
-									if (board.checkIfFull() && !board.sgSOSCheck()) {
-										gameStatusBar.setText("Game Draw.");
+										if (board.checkIfFull() && !board.sgSOSCheck()) {
+											gameStatusBar.setText("Game Draw.");
+										}
 									}
-								}
 
-								if (board.getMode() == 1) {
-									pl1Score.setText("Score: " + updateP1Score(board.ggSOSCheck(rowSelected, colSelected)));
-									gameStatusBar.setText("Player 2 turn.");
-									if (board.checkIfFull()) {
-										if (p1Points > p2Points) {
-											gameStatusBar.setText("Player 1 wins.");
-										}
-										else if (p1Points < p2Points) {
-											gameStatusBar.setText("Player 2 wins.");
-										}
-										else if (p1Points == p2Points) {
-											gameStatusBar.setText("Game draw.");
+									if (board.getMode() == 1) {
+										pl1Score.setText("Score: " + updateP1Score(board.ggSOSCheck(rowSelected, colSelected)));
+										gameStatusBar.setText("Player 2 turn.");
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Player 1 wins.");
+											}
+											else if (p1Points < p2Points) {
+												gameStatusBar.setText("Player 2 wins.");
+											}
+											else if (p1Points == p2Points) {
+												gameStatusBar.setText("Game draw.");
+											}
 										}
 									}
+									board.moveCountInc();
+									repaint();
 								}
-								board.moveCountInc();
+								else if (o1Btn.isSelected()){
+									board.makeOMove(rowSelected, colSelected);
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck()) {
+											gameStatusBar.setText("Player 1 wins.");
+										}
+										else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+											gameStatusBar.setText("Player 2 turn.");
+										}
+									
+										if (board.checkIfFull() && !board.sgSOSCheck()) {
+										gameStatusBar.setText("Game Draw.");
+										}
+									}
+	
+									if (board.getMode() == 1) {
+										pl1Score.setText("Score: " + updateP1Score(board.ggSOSCheck(rowSelected, colSelected)));
+										gameStatusBar.setText("Player 2 turn.");
+										
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Player 1 wins.");
+											}
+											else if (p1Points < p2Points) {
+												gameStatusBar.setText("Player 2 wins.");
+											}
+											else if (p1Points == p2Points) {
+												gameStatusBar.setText("Game draw.");
+											}
+										}
+									}
+									board.moveCountInc();
+									repaint();
+								}
 							}
-							else if (o1Btn.isSelected()){
-								board.makeOMove(rowSelected, colSelected);
+							
+// IF A COMPUTER IS SELECTED FOR PLAYER 1
+							if (comOne.isSelected()) {
+								board.makeAutoSMove();
 								if (board.getMode() == 0) {
 									if (board.sgSOSCheck()) {
-										gameStatusBar.setText("Player 1 wins.");
+										gameStatusBar.setText("Computer 1 wins.");
 									}
 									else if (!(board.checkIfFull() && board.sgSOSCheck())) {
 										gameStatusBar.setText("Player 2 turn.");
 									}
-									
+								
 									if (board.checkIfFull() && !board.sgSOSCheck()) {
-										gameStatusBar.setText("Game Draw.");
+									gameStatusBar.setText("Game Draw.");
 									}
 								}
-	
+								
 								if (board.getMode() == 1) {
 									pl1Score.setText("Score: " + updateP1Score(board.ggSOSCheck(rowSelected, colSelected)));
 									gameStatusBar.setText("Player 2 turn.");
+									
 									if (board.checkIfFull()) {
 										if (p1Points > p2Points) {
-											gameStatusBar.setText("Player 1 wins.");
+											gameStatusBar.setText("Computer 1 wins.");
 										}
 										else if (p1Points < p2Points) {
 											gameStatusBar.setText("Player 2 wins.");
@@ -276,56 +345,97 @@ public class GUI extends JFrame {
 									}
 								}
 								board.moveCountInc();
-							}
+								repaint();
+							}	
 						}
+//						
+						
 						else {
-							if (s2Btn.isSelected()) {
-								board.makeSMove(rowSelected, colSelected);
-								if (board.getMode() == 0) {
-									if (board.sgSOSCheck()) {
-										gameStatusBar.setText("Player 2 wins.");
-									}
-									else if (!(board.checkIfFull() && board.sgSOSCheck())) {
-										gameStatusBar.setText("Player 1 turn.");
-									}
+							if (humTwo.isSelected()) {
+								if (s2Btn.isSelected()) {
+									board.makeSMove(rowSelected, colSelected);
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck()) {
+											gameStatusBar.setText("Player 2 wins.");
+										}
+										else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+											gameStatusBar.setText("Player 1 turn.");
+										}
 									
-									if (board.checkIfFull() && !board.sgSOSCheck()) {
-										gameStatusBar.setText("Game Draw.");
+										if (board.checkIfFull() && !board.sgSOSCheck()) {
+											gameStatusBar.setText("Game Draw.");
+										}
 									}
-								}
 				
-								if (board.getMode() == 1) {
-									pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
-									gameStatusBar.setText("Player 1 turn.");
-									if (board.checkIfFull()) {
-										if (p1Points > p2Points) {
-											gameStatusBar.setText("Player 1 wins.");
+									if (board.getMode() == 1) {
+										pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
+										gameStatusBar.setText("Player 1 turn.");
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Player 1 wins.");
+											}
+											else if (p1Points < p2Points) {
+												gameStatusBar.setText("Player 2 wins.");
+											}
+											else if (p1Points == p2Points) {
+												gameStatusBar.setText("Game draw.");
+											}
 										}
-										else if (p1Points < p2Points) {
-											gameStatusBar.setText("Player 2 wins.");
+									
+										board.moveCountInc();
+										repaint();
+									}
+									else if (o2Btn.isSelected()){
+										board.makeOMove(rowSelected, colSelected);
+										if (board.getMode() == 0) {
+											if (board.sgSOSCheck()) {
+												gameStatusBar.setText("Player 2 wins.");
+											}
+											else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+												gameStatusBar.setText("Player 1 turn.");
+											}
+									
+											if (board.checkIfFull() && !board.sgSOSCheck()) {
+												gameStatusBar.setText("Game Draw.");
+											}
 										}
-										else if (p1Points == p2Points) {
-											gameStatusBar.setText("Game draw.");
+			
+										if (board.getMode() == 1) {
+											pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
+											gameStatusBar.setText("Player 1 turn.");
+											if (board.checkIfFull()) {
+												if (p1Points > p2Points) {
+													gameStatusBar.setText("Player 1 wins.");
+												}
+												else if (p1Points < p2Points) {
+													gameStatusBar.setText("Player 2 wins.");
+												}
+												else if (p1Points == p2Points) {
+													gameStatusBar.setText("Game draw.");
+												}
+											}
 										}
+										board.moveCountInc();
+										repaint();
 									}
 								}
-								board.moveCountInc();
 							}
-							else if (o2Btn.isSelected()){
-								board.makeOMove(rowSelected, colSelected);
+							
+							if (comTwo.isSelected()) {
+								board.makeAutoOMove();
 								if (board.getMode() == 0) {
 									if (board.sgSOSCheck()) {
-										gameStatusBar.setText("Player 2 wins.");
+										gameStatusBar.setText("Computer 2 wins.");
 									}
 									else if (!(board.checkIfFull() && board.sgSOSCheck())) {
 										gameStatusBar.setText("Player 1 turn.");
 									}
-									
+							
 									if (board.checkIfFull() && !board.sgSOSCheck()) {
 										gameStatusBar.setText("Game Draw.");
 									}
 								}
-			
+								
 								if (board.getMode() == 1) {
 									pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
 									gameStatusBar.setText("Player 1 turn.");
@@ -334,19 +444,19 @@ public class GUI extends JFrame {
 											gameStatusBar.setText("Player 1 wins.");
 										}
 										else if (p1Points < p2Points) {
-											gameStatusBar.setText("Player 2 wins.");
+											gameStatusBar.setText("Computer 2 wins.");
 										}
 										else if (p1Points == p2Points) {
 											gameStatusBar.setText("Game draw.");
 										}
 									}
 								}
+								
 								board.moveCountInc();
+								repaint();
 							}
 						}
-					repaint();
-				}
-			});
+				}});
 		}
 
 		@Override

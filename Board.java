@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Random;
+
 public class Board {
 	public enum Cell {EMPTY, S, O};
 	private int TOTALROWS = 8;
@@ -96,7 +98,30 @@ public class Board {
 			grid[row][col] = Cell.O;
 			//System.out.println(row + ", " + col);
 		}
-		turn = 'O';
+		//turn = 'O';
+	}
+	
+	//Gonna test the auto move by having the computer only being able to make O moves first
+	public void makeAutoOMove() {
+		Random random = new Random();
+		int row = random.nextInt(getRows());
+		int col = random.nextInt(getCols());
+		if (grid[row][col] == Cell.O || grid[row][col] == Cell.S) {
+			row = random.nextInt(getRows());
+			col = random.nextInt(getCols());
+		}
+		makeOMove(row, col);
+	}
+	
+	public void makeAutoSMove() {
+		Random random = new Random();
+		int row = random.nextInt(getRows());
+		int col = random.nextInt(getCols());
+		if (grid[row][col] == Cell.O || grid[row][col] == Cell.S) {
+			row = random.nextInt(getRows());
+			col = random.nextInt(getCols());
+		}
+		makeSMove(row, col);
 	}
 
 	public boolean isValidMove(int row, int col) {
@@ -116,20 +141,6 @@ public class Board {
 		return temp;
 	}
 	
-	/*
-	public boolean sgSOSCheck(int row, int col) {
-		boolean temp = false;
-		if (vertCheck2(row, col) 
-				|| horCheck2(row,col) 
-				|| checkLeftAscend(row,col)
-				|| checkLeftDescend(row,col)
-				|| checkRightAscend(row,col)
-				|| checkRightDescend(row,col)) {
-			temp = true;	
-		}
-		return temp;
-	}
-	*/
 	public int ggSOSCheck(int row, int col) {
 		int points = 0;
 		if (vertCheck2(row, col)) {

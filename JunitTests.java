@@ -80,18 +80,6 @@ public class JunitTests {
 	}
 
 	
-// TEST TO SEE IF A VERTICAL SOS IS DETECTED
-	@Test
-	public void vertSOS() {
-		Board board = new Board();
-		board.setBoardSize(6);
-		board.makeSMove(3, 1);
-		board.makeOMove(4, 1);
-		board.makeSMove(5, 1);
-		
-		assertEquals(true, board.vertCheck());
-	}
-	
 	@Test
 	public void simpleGameSOS() {
 		Board board = new Board();
@@ -141,7 +129,7 @@ public class JunitTests {
 		board.makeOMove(0, 4);
 		board.makeSMove(0, 5);
 		
-		assertEquals(true, board.ggHorCheck(0, 4));
+		assertEquals(true, board.checkHor(0, 4));
 		
 	}
 	
@@ -150,11 +138,11 @@ public class JunitTests {
 		Board board = new Board();
 		board.setBoardSize(7);
 		board.makeSMove(4,2);
-		assertEquals(false, board.ggVertCheck(4,2));
+		assertEquals(false, board.checkVert(4,2));
 		board.makeOMove(5, 2);
-		assertEquals(false, board.ggVertCheck(5,2));
+		assertEquals(false, board.checkVert(5,2));
 		board.makeSMove(6, 2);
-		assertEquals(true, board.ggVertCheck(6, 2));
+		assertEquals(true, board.checkVert(6, 2));
 	}
 	
 	@Test
@@ -162,62 +150,11 @@ public class JunitTests {
 		Board board = new Board();
 		board.setBoardSize(7);
 		board.makeSMove(6, 2);
-		assertEquals(false, board.ggVertCheck(6, 2));
+		assertEquals(false, board.checkVert(6, 2));
 		board.makeOMove(5, 2);
-		assertEquals(false, board.ggVertCheck(5, 2));
+		assertEquals(false, board.checkVert(5, 2));
 		board.makeSMove(4,2);
-		assertEquals(true, board.ggVertCheck(4,2));
-	}
-	
-	@Test
-	public void ggCheckLeftAscend() {
-		Board board = new Board();
-		board.setBoardSize(3);
-		board.makeSMove(0, 0);
-		assertEquals(false, board.checkLeftAscend(0,0));
-		board.makeOMove(1, 1);
-		assertEquals(false, board.checkLeftAscend(1, 1));
-		board.makeSMove(2, 2);
-		assertEquals(true, board.checkLeftAscend(2, 2));
-		
-	}
-	
-	@Test
-	public void ggCheckLeftDescend() {
-		Board board = new Board();
-		board.setBoardSize(3);
-		board.makeSMove(2, 2);
-		assertEquals(false,board.checkLeftDescend(2, 2));
-		board.makeOMove(1, 1);
-		assertEquals(false, board.checkLeftDescend(1, 1));
-		board.makeSMove(0, 0);
-		assertEquals(true, board.checkLeftDescend(0, 0));
-	}
-	
-	@Test
-	public void ggCheckRightAscend() {
-		Board board = new Board();
-		board.setBoardSize(3);
-		board.makeSMove(0, 2);
-		assertEquals(false, board.checkRightAscend(0, 2));
-		board.makeOMove(1, 1);
-		assertEquals(false, board.checkRightAscend(1, 1));
-		board.makeSMove(2, 0);
-		assertEquals(true, board.checkRightAscend(2, 0));
-		
-	}
-	
-	@Test
-	public void ggCheckRightDescend() {
-		Board board = new Board();
-		board.setBoardSize(3);
-		board.makeSMove(2, 0);
-		assertEquals(false, board.checkRightDescend(2, 0));
-		board.makeOMove(1, 1);
-		assertEquals(false, board.checkRightDescend(1, 1));
-		board.makeSMove(0, 2);
-		assertEquals(true, board.checkRightDescend(0, 2));
-		
+		assertEquals(true, board.checkVert(4,2));
 	}
 	
 //TESTING TO SEE IF AN S IS PLACED ON THE BOARD WHEN USING THE AUTO 'S' MOVE

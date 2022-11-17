@@ -58,7 +58,7 @@ public class JunitTests {
 		}
 	}
 	
-// TEST TO MAKE SURE AN 'S' IS PLACED
+// TEST TO MAKE SURE AN 'S' IS PLACE
 	@Test
 	public void sIsPlaced() {
 		Board board = new Board();
@@ -101,7 +101,7 @@ public class JunitTests {
 		board.makeOMove(0, 1);
 		board.makeSMove(0, 2);
 		
-		assertEquals(true, board.sgSOSCheck());
+		assertEquals(true, board.sgSOSCheck(0,2));
 	}
 	
 // Test to check and make sure that the checkIfFull() method properly returns true when the board is full
@@ -141,7 +141,7 @@ public class JunitTests {
 		board.makeOMove(0, 4);
 		board.makeSMove(0, 5);
 		
-		assertEquals(true, board.horCheck2(0, 4));
+		assertEquals(true, board.ggHorCheck(0, 4));
 		
 	}
 	
@@ -150,11 +150,11 @@ public class JunitTests {
 		Board board = new Board();
 		board.setBoardSize(7);
 		board.makeSMove(4,2);
-		assertEquals(false, board.vertCheck2(4,2));
+		assertEquals(false, board.ggVertCheck(4,2));
 		board.makeOMove(5, 2);
-		assertEquals(false, board.vertCheck2(5,2));
+		assertEquals(false, board.ggVertCheck(5,2));
 		board.makeSMove(6, 2);
-		assertEquals(true, board.vertCheck2(6, 2));
+		assertEquals(true, board.ggVertCheck(6, 2));
 	}
 	
 	@Test
@@ -162,11 +162,11 @@ public class JunitTests {
 		Board board = new Board();
 		board.setBoardSize(7);
 		board.makeSMove(6, 2);
-		assertEquals(false, board.vertCheck2(6, 2));
+		assertEquals(false, board.ggVertCheck(6, 2));
 		board.makeOMove(5, 2);
-		assertEquals(false, board.vertCheck2(5, 2));
+		assertEquals(false, board.ggVertCheck(5, 2));
 		board.makeSMove(4,2);
-		assertEquals(true, board.vertCheck2(4,2));
+		assertEquals(true, board.ggVertCheck(4,2));
 	}
 	
 	@Test
@@ -218,5 +218,51 @@ public class JunitTests {
 		board.makeSMove(0, 2);
 		assertEquals(true, board.checkRightDescend(0, 2));
 		
+	}
+	
+//TESTING TO SEE IF AN S IS PLACED ON THE BOARD WHEN USING THE AUTO 'S' MOVE
+	@Test
+	public void autoSMoveTest() {
+		Board board = new Board();
+		board.setBoardSize(5);
+		board.makeAutoSMove();
+		
+		boolean temp = false;
+		for (int row = 0; row < board.getRows(); row++) {
+			for(int col = 0; col < board.getCols(); col++) {
+				if (board.getCell(row, col) == Cell.S) {
+					temp = true;
+					break;
+				}
+				else {
+					continue;
+				}
+			}
+		}
+		
+		assertEquals(true, temp);
+	}
+	
+//TESTING TO SEE IF AN O IS PLACED ON THE BOARD WHEN USING THE AUTO 'O' MOVE	
+	@Test 
+	public void autoOMoveTest() {
+		Board board = new Board();
+		board.setBoardSize(7);
+		board.makeAutoOMove();
+		
+		boolean temp = false;
+		for (int row = 0; row < board.getRows(); row++) {
+			for(int col = 0; col < board.getCols(); col++) {
+				if (board.getCell(row, col) == Cell.O) {
+					temp = true;
+					break;
+				}
+				else {
+					continue;
+				}
+			}
+		}
+		
+		assertEquals(true, temp);
 	}
 }

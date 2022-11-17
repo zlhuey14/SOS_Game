@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -42,6 +43,10 @@ public class GUI extends JFrame {
 	private JLabel pl2Score;
 	private int p2Points = 0;
 	private int p1Points = 0;
+	
+	Random random = new Random();
+	public int randomMoveChance;
+	private static int CHANCE = 2;
 	
 	public GUI(Board board) {
 		this.board = board;
@@ -246,14 +251,14 @@ public class GUI extends JFrame {
 								if (s1Btn.isSelected()) {
 									board.makeSMove(rowSelected, colSelected);
 									if (board.getMode() == 0) {
-										if (board.sgSOSCheck()) {
+										if (board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Player 1 wins.");
 										}
-										else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 											gameStatusBar.setText("Player 2 turn.");
 										}
 									
-										if (board.checkIfFull() && !board.sgSOSCheck()) {
+										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Game Draw.");
 										}
 									}
@@ -279,14 +284,14 @@ public class GUI extends JFrame {
 								else if (o1Btn.isSelected()){
 									board.makeOMove(rowSelected, colSelected);
 									if (board.getMode() == 0) {
-										if (board.sgSOSCheck()) {
+										if (board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Player 1 wins.");
 										}
-										else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 											gameStatusBar.setText("Player 2 turn.");
 										}
 									
-										if (board.checkIfFull() && !board.sgSOSCheck()) {
+										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 										gameStatusBar.setText("Game Draw.");
 										}
 									}
@@ -312,18 +317,25 @@ public class GUI extends JFrame {
 								}
 							}
 							
-// IF A COMPUTER IS SELECTED FOR PLAYER 1
+							//START: IF A COMPUTER IS SELECTED FOR PLAYER 1
 							if (comOne.isSelected()) {
-								board.makeAutoSMove();
+								randomMoveChance = random.nextInt(CHANCE);
+								if(randomMoveChance % 2 == 0) {
+									board.makeAutoSMove();
+								}
+								else {
+									board.makeAutoOMove();
+								}
+								
 								if (board.getMode() == 0) {
-									if (board.sgSOSCheck()) {
+									if (board.sgSOSCheck(rowSelected, colSelected)) {
 										gameStatusBar.setText("Computer 1 wins.");
 									}
-									else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+									else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 										gameStatusBar.setText("Player 2 turn.");
 									}
 								
-									if (board.checkIfFull() && !board.sgSOSCheck()) {
+									if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 									gameStatusBar.setText("Game Draw.");
 									}
 								}
@@ -348,21 +360,21 @@ public class GUI extends JFrame {
 								repaint();
 							}	
 						}
-//						
-						
+						//END						
+						//START: IF A HUMAN IS SELECTED FOR PLAYER 2						
 						else {
 							if (humTwo.isSelected()) {
 								if (s2Btn.isSelected()) {
 									board.makeSMove(rowSelected, colSelected);
 									if (board.getMode() == 0) {
-										if (board.sgSOSCheck()) {
+										if (board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Player 2 wins.");
 										}
-										else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 											gameStatusBar.setText("Player 1 turn.");
 										}
 									
-										if (board.checkIfFull() && !board.sgSOSCheck()) {
+										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Game Draw.");
 										}
 									}
@@ -385,57 +397,68 @@ public class GUI extends JFrame {
 										board.moveCountInc();
 										repaint();
 									}
-									else if (o2Btn.isSelected()){
-										board.makeOMove(rowSelected, colSelected);
-										if (board.getMode() == 0) {
-											if (board.sgSOSCheck()) {
+								}
+								else if (o2Btn.isSelected()){
+									board.makeOMove(rowSelected, colSelected);
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck(rowSelected, colSelected)) {
+											gameStatusBar.setText("Player 2 wins.");
+										}
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
+											gameStatusBar.setText("Player 1 turn.");
+										}
+									
+										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
+											gameStatusBar.setText("Game Draw.");
+										}
+									}
+			
+									if (board.getMode() == 1) {
+										pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
+										gameStatusBar.setText("Player 1 turn.");
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Player 1 wins.");
+											}
+											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Player 2 wins.");
 											}
-											else if (!(board.checkIfFull() && board.sgSOSCheck())) {
-												gameStatusBar.setText("Player 1 turn.");
-											}
-									
-											if (board.checkIfFull() && !board.sgSOSCheck()) {
-												gameStatusBar.setText("Game Draw.");
-											}
-										}
-			
-										if (board.getMode() == 1) {
-											pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
-											gameStatusBar.setText("Player 1 turn.");
-											if (board.checkIfFull()) {
-												if (p1Points > p2Points) {
-													gameStatusBar.setText("Player 1 wins.");
-												}
-												else if (p1Points < p2Points) {
-													gameStatusBar.setText("Player 2 wins.");
-												}
-												else if (p1Points == p2Points) {
+											else if (p1Points == p2Points) {
 													gameStatusBar.setText("Game draw.");
-												}
 											}
 										}
-										board.moveCountInc();
-										repaint();
 									}
+									board.moveCountInc();
+									repaint();
 								}
 							}
-							
+			
+							//END								
+							//START: This if block uses a random int to randomly determine which move the computer should make							
 							if (comTwo.isSelected()) {
-								board.makeAutoOMove();
+								randomMoveChance = random.nextInt(CHANCE);
+								if(randomMoveChance % 2 == 0) {
+									board.makeAutoSMove();
+								}
+								else {
+									board.makeAutoOMove();
+								}
+								//								
+								//This if block decides the status of a SIMPLE GAME by checking for SOS's and if the board is full 
 								if (board.getMode() == 0) {
-									if (board.sgSOSCheck()) {
+									if (board.sgSOSCheck(rowSelected, colSelected)) {
 										gameStatusBar.setText("Computer 2 wins.");
 									}
-									else if (!(board.checkIfFull() && board.sgSOSCheck())) {
+									else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 										gameStatusBar.setText("Player 1 turn.");
 									}
 							
-									if (board.checkIfFull() && !board.sgSOSCheck()) {
+									if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 										gameStatusBar.setText("Game Draw.");
 									}
 								}
-								
+								//END
+								//START: This if block decides the status of a GENERAL GAME by checking for SOS's, if the board is full, and who has how many points
 								if (board.getMode() == 1) {
 									pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
 									gameStatusBar.setText("Player 1 turn.");
@@ -451,8 +474,8 @@ public class GUI extends JFrame {
 										}
 									}
 								}
-								
-								board.moveCountInc();
+								//END
+								board.moveCountInc(); //Must increment the move counter so that it goes to the next players turn
 								repaint();
 							}
 						}

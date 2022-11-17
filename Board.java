@@ -10,6 +10,10 @@ public class Board {
 	private Cell[][] grid;
 	private char turn;
 	private int moveCounter;
+	private int RIGHT_BOARD_EDGE = TOTALCOLS - 1;
+	private int LEFT_BOARD_EDGE = 0;
+	private int BOTTOM_BOARD_EDGE = TOTALROWS - 1;
+	private int TOP_BOARD_EDGE = 0;
 	
 	public Board() {
 		grid = new Cell[TOTALROWS][TOTALCOLS];
@@ -129,13 +133,12 @@ public class Board {
 		{
 			return true;
 		}
-		
 		return false;
 	}
 	
-	public boolean sgSOSCheck() {
+	public boolean sgSOSCheck(int row, int col) {
 		boolean temp = false;
-		if (vertCheck() || horCheck() || diagCheckRD() || diagCheckLD()) {
+		if (ggVertCheck(row, col) || ggHorCheck(row, col) || checkRightDiag(row, col) || checkLeftDiag(row, col)) {
 			temp = true;
 		}
 		return temp;
@@ -143,27 +146,23 @@ public class Board {
 	
 	public int ggSOSCheck(int row, int col) {
 		int points = 0;
-		if (vertCheck2(row, col)) {
+		if (ggVertCheck(row, col)) {
 			points = points + 1;
 		}
-		if (horCheck2(row,col)) {
+		if (ggHorCheck(row,col)) {
 			points = points + 1;
 		}
-		if (checkLeftAscend(row,col)) {
+		if (checkLeftDiag(row,col)) {
 			points = points + 1;
 		}
-		if (checkLeftDescend(row,col)) {
+		if (checkRightDiag(row,col)) {
 			points = points + 1;
 		}
-		if (checkRightAscend(row,col)) {
-			points = points + 1;
-		}
-		if (checkRightDescend(row,col)) {
-			points = points + 1;
-		}
-		System.out.println(points);
+
+		System.out.println(points); //this just prints the number of points a player scored in a given turn
 		return points;
 	}
+
 	
 	public boolean vertCheck() {
 		boolean temp = false;
@@ -177,7 +176,46 @@ public class Board {
 		return temp;
 	}
 	
-	public boolean vertCheck2(int row, int col) {
+	public boolean ggVertCheck(int row, int col) {
+		boolean temp = false;
+		if (getCell(row,col) == Cell.S) {
+			if (row - 2 < TOP_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col] == Cell.O) && (grid[row+2][col] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if (row + 2 > BOTTOM_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col] == Cell.O) && (grid[row-2][col] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if (row - 2 < TOP_BOARD_EDGE && row + 2 > BOTTOM_BOARD_EDGE) {
+				temp = false;
+			}
+			else {
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col] == Cell.O) && (grid[row+2][col] == Cell.S)) {
+					temp = true;
+				}
+				
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col] == Cell.O) && (grid[row-2][col] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		
+		if (getCell(row,col) == Cell.O) {
+			if (row - 1 >= TOP_BOARD_EDGE && row + 1 <= BOTTOM_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.O) && (grid[row-1][col] == Cell.S) && (grid[row+1][col] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		
+		return temp;
+	}
+	
+	/*
+	public boolean ggVertCheck(int row, int col) {
 		boolean temp = false;
 		if (row > TOTALROWS - 3) {
 			row = TOTALROWS -3;
@@ -187,7 +225,9 @@ public class Board {
 		}
 		return temp;
 	}
-
+	*/
+	
+	
 	public boolean horCheck() {
 		boolean temp = false;
 		for (int row = 0; row < TOTALROWS; row++) {
@@ -200,7 +240,52 @@ public class Board {
 		return temp;
 	}
 	
-	public boolean horCheck2(int row, int col) {
+	public boolean ggHorCheck(int row, int col) {
+		boolean temp = false;
+		
+		//This if block checks the horizontal when an S is placed
+		if (getCell(row,col)== Cell.S) {
+			if (col + 2 > RIGHT_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row][col-1] == Cell.O) && (grid[row][col-2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if (col - 2 < LEFT_BOARD_EDGE ) {
+				if ((grid[row][col] == Cell.S) && (grid[row][col+1] == Cell.O) && (grid[row][col+2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if (col - 2 < LEFT_BOARD_EDGE && col + 2 > RIGHT_BOARD_EDGE) {
+				temp = false;
+			}
+			
+			else {
+				if ((grid[row][col] == Cell.S) && (grid[row][col+1] == Cell.O) && (grid[row][col+2] == Cell.S)) {
+					temp = true;
+				}
+				
+				if ((grid[row][col] == Cell.S) && (grid[row][col-1] == Cell.O) && (grid[row][col-2] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		
+		//This if block checks the horizontal when an O is placed
+		if (getCell(row,col)==Cell.O) {
+			if (col + 1 <= TOTALCOLS - 1 && col - 1 >= 0) {
+				if ((grid[row][col] == Cell.O) && (grid[row][col-1] == Cell.S) && (grid[row][col+1] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+
+		return temp;
+	}
+	
+	//Above ggHorCheck is the updated version
+	//Commented out below is the original
+	/*
+	public boolean ggHorCheck(int row, int col) {
 		boolean temp = false;
 		if (col > TOTALCOLS - 3) {
 			col = TOTALCOLS - 3;
@@ -210,7 +295,8 @@ public class Board {
 		}
 		return temp;
 	}
-
+	*/
+	
 	public boolean diagCheckRD() {
 		boolean temp = false;
 		for (int row = 0; row < TOTALROWS - 2; row++) {
@@ -224,8 +310,82 @@ public class Board {
 		
 	}
 	
-	//STILL WORKING ON MAKING A BETTER DIAGONAL CHECK
-	//THIS STILL NEEDS TO BE FINISHED 
+	/* I consider this a left diagonal
+	 *   0 1 2 3 4 5 6 7
+	 * 0           S 
+	 * 1             O 
+	 * 2               S
+	 * 3   
+	 * 4  
+	 * 5
+	 * 6
+	 * 7 
+	 */
+	
+	public boolean checkLeftDiag(int row, int col) {
+		boolean temp = false;
+		if (getCell(row, col) == Cell.S) {
+			if(col - 2 >= LEFT_BOARD_EDGE && row - 2 >= TOP_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col-1] == Cell.O) && (grid[row-2][col-2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			if (col + 2 <= RIGHT_BOARD_EDGE && row + 2 <= BOTTOM_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col+1] == Cell.O) && (grid[row+2][col+2] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		
+		if (getCell(row, col) == Cell.O) {
+			if ((row - 1 >= TOP_BOARD_EDGE && col - 1 >= LEFT_BOARD_EDGE) && (row + 1 <= BOTTOM_BOARD_EDGE && col + 1 <= RIGHT_BOARD_EDGE)) {
+				if ((grid[row][col] == Cell.O) && (grid[row+1][col+1] == Cell.S) && (grid[row-1][col-1] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		return temp;
+	}
+	
+	/*
+	public boolean checkLeftDiag(int row, int col) {
+		boolean temp = false;
+		if (getCell(row, col) == Cell.S) {
+			if (col + 2 > RIGHT_BOARD_EDGE || row + 2 > BOTTOM_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col-1] == Cell.O) && (grid[row-2][col-2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if (col - 2 < LEFT_BOARD_EDGE || row - 2 < TOP_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col+1] == Cell.O) && (grid[row+2][col+2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if ((col - 2 < LEFT_BOARD_EDGE && row - 2 < TOP_BOARD_EDGE) || (col + 2 > RIGHT_BOARD_EDGE && row + 2 > BOTTOM_BOARD_EDGE)) {
+				temp = false;
+			}
+			else {
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col-1] == Cell.O) && (grid[row-2][col-2] == Cell.S)) {
+					temp = true;
+				}
+				
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col+1] == Cell.O) && (grid[row+2][col+2] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		
+		if (getCell(row, col) == Cell.O) {
+			if ((row - 1 >= TOP_BOARD_EDGE && col - 1 >= LEFT_BOARD_EDGE) && (row + 1 <= BOTTOM_BOARD_EDGE && col + 1 <= RIGHT_BOARD_EDGE)) {
+				if ((grid[row][col] == Cell.O) && (grid[row+1][col+1] == Cell.S) && (grid[row-1][col-1] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		return temp;
+	}
+	*/
+	
 	public boolean checkLeftAscend(int row, int col) {
 		boolean temp = false;
 		int limit = 2;
@@ -271,6 +431,82 @@ public class Board {
 		}
 		return temp;
 	}
+	
+	/* I consider this a right Diagonal
+	 *   0 1 2 3 4 5 6 7
+	 * 0 
+	 * 1     S
+	 * 2   O  
+	 * 3 S  
+	 * 4  
+	 * 5
+	 * 6
+	 * 7 
+	 */
+	
+	public boolean checkRightDiag(int row, int col) {
+		boolean temp = false;
+		if(getCell(row, col) == Cell.S) {
+			if(col + 2 <= RIGHT_BOARD_EDGE && row - 2 >= TOP_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col+1] == Cell.O) && (grid[row-2][col+2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			
+			if (col - 2 >= LEFT_BOARD_EDGE && row + 2 <= BOTTOM_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col-1] == Cell.O) && (grid[row+2][col-2] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		
+		if(getCell(row,col) == Cell.O) {
+			if ((row - 1 >= TOP_BOARD_EDGE && col + 1 >= LEFT_BOARD_EDGE) && (row + 1 <= BOTTOM_BOARD_EDGE && col - 1 <= RIGHT_BOARD_EDGE)) {
+				if ((grid[row][col] == Cell.O) && (grid[row-1][col+1] == Cell.S) && (grid[row+1][col-1] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		return temp;
+	}
+	
+	/*
+	public boolean checkRightDiag(int row, int col) {
+		boolean temp = false;
+		if(getCell(row, col) == Cell.S) {
+			if (col + 2 > RIGHT_BOARD_EDGE || row - 2 > TOP_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col-1] == Cell.O) && (grid[row+2][col-2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if (col - 2 < LEFT_BOARD_EDGE || row + 2 > BOTTOM_BOARD_EDGE) {
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col+1] == Cell.O) && (grid[row-2][col+2] == Cell.S)) {
+					temp = true;
+				}
+			}
+			else if ((col + 2 > RIGHT_BOARD_EDGE || row - 2 > TOP_BOARD_EDGE) && (col - 2 < LEFT_BOARD_EDGE || row + 2 > BOTTOM_BOARD_EDGE)) {
+				temp = false;
+			}
+			else {
+				if ((grid[row][col] == Cell.S) && (grid[row+1][col-1] == Cell.O) && (grid[row+2][col-2] == Cell.S)) {
+					temp = true;
+				}
+				if ((grid[row][col] == Cell.S) && (grid[row-1][col+1] == Cell.O) && (grid[row-2][col+2] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		
+		if(getCell(row,col) == Cell.O) {
+			if ((row - 1 >= TOP_BOARD_EDGE && col + 1 >= LEFT_BOARD_EDGE) && (row + 1 <= BOTTOM_BOARD_EDGE && col - 1 <= RIGHT_BOARD_EDGE)) {
+				if ((grid[row][col] == Cell.O) && (grid[row-1][col+1] == Cell.S) && (grid[row+1][col-1] == Cell.S)) {
+					temp = true;
+				}
+			}
+		}
+		return temp;
+	}
+	*/
 	
 	public boolean checkRightAscend(int row, int col) {
 		boolean temp = false;

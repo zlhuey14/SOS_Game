@@ -241,6 +241,7 @@ public class GUI extends JFrame {
 				public void mouseClicked(MouseEvent e) {  
 						int rowSelected = e.getY() / CELL_SIZE;
 						int colSelected = e.getX() / CELL_SIZE;
+						System.out.println("Coodinate clicked: (" + colSelected + ", " + rowSelected + ") ");
 						/*
 						 * player turn is determined by the turnCounter.
 						 * if the moveCounter is even, Player 1 goes,
@@ -394,9 +395,9 @@ public class GUI extends JFrame {
 											}
 										}
 									
-										board.moveCountInc();
-										repaint();
 									}
+									board.moveCountInc();
+									repaint();
 								}
 								else if (o2Btn.isSelected()){
 									board.makeOMove(rowSelected, colSelected);

@@ -92,7 +92,7 @@ public class Board {
 	public void makeSMove(int row, int col) {
 		if(isValidMove(row,col) && grid[row][col] == Cell.EMPTY) {
 			grid[row][col] = Cell.S;
-			//System.out.println(row + ", " + col);
+			System.out.println("Coordinate placed: (" + col + ", " + row + ") ");
 		}
 		turn = 'S';
 	}
@@ -100,7 +100,7 @@ public class Board {
 	public void makeOMove(int row, int col) {
 		if(isValidMove(row,col) && grid[row][col] == Cell.EMPTY) {
 			grid[row][col] = Cell.O;
-			//System.out.println(row + ", " + col);
+			System.out.println("Coordinate placed: (" + col + ", " + row + ") ");
 		}
 		//turn = 'O';
 	}

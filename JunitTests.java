@@ -121,41 +121,169 @@ public class JunitTests {
 		assertEquals(false, board.checkIfFull());
 	}
 	
+	
+	//Checking for a horizontal SOS where an S is placed on the left side of an O
 	@Test
-	public void ggHorCheck() {
+	public void horCheck1() {
+		Board board = new Board();
+		board.setBoardSize(6);
+		board.makeSMove(0, 5);
+		assertEquals(false, board.checkHor(0, 5));
+		board.makeOMove(0, 4);
+		assertEquals(false, board.checkHor(0, 4));
+		board.makeSMove(0, 3);
+		assertEquals(true, board.checkHor(0, 3));
+		
+	}
+	
+	//Checking for a horizontal SOS where an S is placed on the right side of an O
+	@Test 
+	public void horCheck2() {
 		Board board = new Board();
 		board.setBoardSize(6);
 		board.makeSMove(0, 3);
+		assertEquals(false, board.checkHor(0, 3));
 		board.makeOMove(0, 4);
+		assertEquals(false, board.checkHor(0, 4));
 		board.makeSMove(0, 5);
-		
+		assertEquals(true, board.checkHor(0, 5));
+	}
+	
+	//Checking for a horizontal SOS where an O is placed between two S's
+	@Test
+	public void horCheck3() {
+		Board board = new Board();
+		board.setBoardSize(6);
+		board.makeSMove(0, 3);
+		assertEquals(false, board.checkHor(0, 3));
+		board.makeSMove(0, 5);
+		assertEquals(false, board.checkHor(0, 5));
+		board.makeOMove(0, 4);
 		assertEquals(true, board.checkHor(0, 4));
+
+	}
+	
+	//Checking for a vertical SOS where an SOS is completed by placing an S above an O
+	@Test
+	public void vertCheck1() {
+		Board board = new Board();
+		board.setBoardSize(7);
+		board.makeSMove(3, 3);
+		assertEquals(false, board.checkVert(3, 3));
+		board.makeOMove(2, 3);
+		assertEquals(false, board.checkVert(2, 3));
+		board.makeSMove(1, 3);
+		assertEquals(true, board.checkVert(1, 3));
 		
 	}
 	
+	//Checking for a vertical SOS where an SOS is completed by placing an S below an O
 	@Test
-	public void ggVertCheck() {
+	public void vertCheck2() {
 		Board board = new Board();
 		board.setBoardSize(7);
-		board.makeSMove(4,2);
-		assertEquals(false, board.checkVert(4,2));
-		board.makeOMove(5, 2);
-		assertEquals(false, board.checkVert(5,2));
-		board.makeSMove(6, 2);
-		assertEquals(true, board.checkVert(6, 2));
+		board.makeSMove(1, 3);
+		assertEquals(false, board.checkVert(1, 3));
+		board.makeOMove(2, 3);
+		assertEquals(false, board.checkVert(2, 3));
+		board.makeSMove(3, 3);
+		assertEquals(true, board.checkVert(3, 3));
+		
 	}
 	
+	//Checking for a vertical SOS where an O is placed between two S's
 	@Test
-	public void ggVertCheckReverse() {
+	public void vertCheck3() {
 		Board board = new Board();
 		board.setBoardSize(7);
-		board.makeSMove(6, 2);
-		assertEquals(false, board.checkVert(6, 2));
-		board.makeOMove(5, 2);
-		assertEquals(false, board.checkVert(5, 2));
-		board.makeSMove(4,2);
-		assertEquals(true, board.checkVert(4,2));
+		board.makeSMove(1, 3);
+		assertEquals(false, board.checkVert(1, 3));
+		board.makeSMove(3, 3);
+		assertEquals(false, board.checkVert(3, 3));
+		board.makeOMove(2, 3);
+		assertEquals(true, board.checkVert(2, 3));
 	}
+	
+	//Checking for a right-diagonal SOS where an S is placed in the upper right corner
+	@Test
+	public void rightDiagCheck1() {
+		Board board = new Board();
+		board.setBoardSize(8);
+		board.makeSMove(5, 4);
+		assertEquals(false, board.checkRightDiag(5, 4));
+		board.makeOMove(4, 5);
+		assertEquals(false, board.checkRightDiag(4, 5));
+		board.makeSMove(3, 6);
+		assertEquals(true, board.checkRightDiag(3, 6));
+		
+	}
+	
+	//Checking for a right-diagonal SOS where an S is placed in the lower left corner
+	@Test
+	public void rightDiagCheck2() {
+		Board board = new Board();
+		board.setBoardSize(8);
+		board.makeSMove(3, 6);
+		assertEquals(false, board.checkRightDiag(3, 6));
+		board.makeOMove(4, 5);
+		assertEquals(false, board.checkRightDiag(4, 5));
+		board.makeSMove(5, 4);
+		assertEquals(true, board.checkRightDiag(5, 4));
+	}
+	
+	//Checking for a right-diagonal SOS wher an O is placed between the S's
+	@Test
+	public void rightDiagCheck3() {
+		Board board = new Board();
+		board.setBoardSize(8);
+		board.makeSMove(3, 6);
+		assertEquals(false, board.checkRightDiag(3, 6));
+		board.makeSMove(5, 4);
+		assertEquals(false, board.checkRightDiag(5, 4));
+		board.makeOMove(4, 5);
+		assertEquals(true, board.checkRightDiag(4, 5));
+	}
+	
+	//Checking for a left-diagonal SOS where an S is placed in the upper left corner
+	@Test
+	public void leftDiagCheck1() {
+		Board board = new Board();
+		board.setBoardSize(8);
+		board.makeSMove(2, 7);
+		assertEquals(false, board.checkLeftDiag(2, 7));
+		board.makeOMove(1, 6);
+		assertEquals(false, board.checkLeftDiag(1, 6));
+		board.makeSMove(0, 5);
+		assertEquals(true, board.checkLeftDiag(0, 5));
+	}
+	
+	//Checking for a left-diagonal SOS where an S is placed in the lower right corner
+	@Test
+	public void leftDiagCheck2() {
+		Board board = new Board();
+		board.setBoardSize(8);
+		board.makeSMove(0, 5);
+		assertEquals(false, board.checkLeftDiag(0, 5));
+		board.makeOMove(1, 6);
+		assertEquals(false, board.checkLeftDiag(1, 6));
+		board.makeSMove(2, 7);
+		assertEquals(true, board.checkLeftDiag(2, 7));
+	}
+	
+	//Checking for a left-diagonal SOS where an O is placed between the S's
+	@Test
+	public void leftDiagCheck3() {
+		Board board = new Board();
+		board.setBoardSize(8);
+		board.makeSMove(0, 5);
+		assertEquals(false, board.checkLeftDiag(0, 5));
+		board.makeSMove(2, 7);
+		assertEquals(false, board.checkLeftDiag(2, 7));
+		board.makeOMove(1, 6);
+		assertEquals(true, board.checkLeftDiag(1, 6));
+	}
+	
+	
 	
 //TESTING TO SEE IF AN S IS PLACED ON THE BOARD WHEN USING THE AUTO 'S' MOVE
 	@Test

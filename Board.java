@@ -92,7 +92,9 @@ public class Board {
 	public void makeSMove(int row, int col) {
 		if(isValidMove(row,col) && grid[row][col] == Cell.EMPTY) {
 			grid[row][col] = Cell.S;
-			System.out.println("Coordinate placed: (" + col + ", " + row + ") ");
+			System.out.println("Coordinate placed");
+			System.out.println("Row: " + row);
+			System.out.println("Col: " + col);
 		}
 		turn = 'S';
 	}
@@ -100,7 +102,9 @@ public class Board {
 	public void makeOMove(int row, int col) {
 		if(isValidMove(row,col) && grid[row][col] == Cell.EMPTY) {
 			grid[row][col] = Cell.O;
-			System.out.println("Coordinate placed: (" + col + ", " + row + ") ");
+			System.out.println("Coordinate placed");
+			System.out.println("Row: " + row);
+			System.out.println("Col: " + col);
 		}
 		//turn = 'O';
 	}
@@ -117,16 +121,16 @@ public class Board {
 		makeOMove(row, col);
 	}
 	
-	public void makeAutoSMove() {
-		Random random = new Random();
-		int row = random.nextInt(getRows());
-		int col = random.nextInt(getCols());
-		if (grid[row][col] == Cell.O || grid[row][col] == Cell.S) {
-			row = random.nextInt(getRows());
-			col = random.nextInt(getCols());
+		public void makeAutoSMove() {
+			Random random = new Random();
+			int row = random.nextInt(getRows());
+			int col = random.nextInt(getCols());
+			if (grid[row][col] == Cell.O || grid[row][col] == Cell.S) {
+				row = random.nextInt(getRows());
+				col = random.nextInt(getCols());
+			}
+			makeSMove(row, col);
 		}
-		makeSMove(row, col);
-	}
 
 	public boolean isValidMove(int row, int col) {
 		if (row >= 0 && row < TOTALROWS && col >= 0 && col < TOTALCOLS)
@@ -285,11 +289,11 @@ public class Board {
 	/* I consider this a right Diagonal
 	 *   0 1 2 3 4 5 6 7
 	 * 0 
-	 * 1     S
-	 * 2   O  
-	 * 3 S  
-	 * 4  
-	 * 5
+	 * 1     
+	 * 2     
+	 * 3             S  
+	 * 4           O 
+	 * 5         S
 	 * 6
 	 * 7 
 	 */

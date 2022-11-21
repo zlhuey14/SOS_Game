@@ -110,26 +110,30 @@ public class Board {
 	}
 	
 	//Gonna test the auto move by having the computer only being able to make O moves first
-	public void makeAutoOMove() {
+	public int[] makeAutoOMove() {
 		Random random = new Random();
-		int row = random.nextInt(getRows());
-		int col = random.nextInt(getCols());
-		if (grid[row][col] == Cell.O || grid[row][col] == Cell.S) {
-			row = random.nextInt(getRows());
-			col = random.nextInt(getCols());
+		int[] rndmCoords = new int[2];
+		rndmCoords[0] = random.nextInt(getRows());
+		rndmCoords[1] = random.nextInt(getCols());
+		if (grid[rndmCoords[0]][rndmCoords[1]] == Cell.O || grid[rndmCoords[0]][rndmCoords[1]] == Cell.S) {
+			rndmCoords[0] = random.nextInt(getRows());
+			rndmCoords[1] = random.nextInt(getCols());
 		}
-		makeOMove(row, col);
+		makeOMove(rndmCoords[0], rndmCoords[1]);
+		return rndmCoords;
 	}
 	
-		public void makeAutoSMove() {
+		public int[] makeAutoSMove() {
 			Random random = new Random();
-			int row = random.nextInt(getRows());
-			int col = random.nextInt(getCols());
-			if (grid[row][col] == Cell.O || grid[row][col] == Cell.S) {
-				row = random.nextInt(getRows());
-				col = random.nextInt(getCols());
+			int[] rndmCoords = new int[2];
+			rndmCoords[0] = random.nextInt(getRows());
+			rndmCoords[1] = random.nextInt(getCols());
+			if (grid[rndmCoords[0]][rndmCoords[1]] == Cell.O || grid[rndmCoords[0]][rndmCoords[1]] == Cell.S) {
+				rndmCoords[0] = random.nextInt(getRows());
+				rndmCoords[1] = random.nextInt(getCols());
 			}
-			makeSMove(row, col);
+			makeSMove(rndmCoords[0], rndmCoords[1]);
+			return rndmCoords;
 		}
 
 	public boolean isValidMove(int row, int col) {
@@ -315,7 +319,7 @@ public class Board {
 		}
 		
 		if(getCell(row,col) == Cell.O) {
-			if ((row - 1 >= TOP_BOARD_EDGE && col + 1 >= LEFT_BOARD_EDGE) && (row + 1 <= BOTTOM_BOARD_EDGE && col - 1 <= RIGHT_BOARD_EDGE)) {
+			if ((row - 1 >= TOP_BOARD_EDGE && col + 1 <= LEFT_BOARD_EDGE) && (row + 1 <= BOTTOM_BOARD_EDGE && col - 1 >= RIGHT_BOARD_EDGE)) {
 				if ((grid[row][col] == Cell.O) && (grid[row-1][col+1] == Cell.S) && (grid[row+1][col-1] == Cell.S)) {
 					temp = true;
 				}

@@ -324,45 +324,78 @@ public class GUI extends JFrame {
 							if (comOne.isSelected()) {
 								randomMoveChance = random.nextInt(CHANCE);
 								if(randomMoveChance % 2 == 0) {
-									board.makeAutoSMove();
-								}
-								else {
-									board.makeAutoOMove();
-								}
-								
-								if (board.getMode() == 0) {
-									if (board.sgSOSCheck(rowSelected, colSelected)) {
-										gameStatusBar.setText("Computer 1 wins.");
-									}
-									else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
-										gameStatusBar.setText("Player 2 turn.");
-									}
-								
-									if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
-									gameStatusBar.setText("Game Draw.");
-									}
-								}
-								
-								if (board.getMode() == 1) {
-									pl1Score.setText("Score: " + updateP1Score(board.ggSOSCheck(rowSelected, colSelected)));
-									gameStatusBar.setText("Player 2 turn.");
+									int[] rndmCoords = board.makeAutoSMove();
 									
-									if (board.checkIfFull()) {
-										if (p1Points > p2Points) {
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Computer 1 wins.");
 										}
-										else if (p1Points < p2Points) {
-											gameStatusBar.setText("Player 2 wins.");
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
+											gameStatusBar.setText("Player 2 turn.");
 										}
-										else if (p1Points == p2Points) {
-											gameStatusBar.setText("Game draw.");
+									
+										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
+										gameStatusBar.setText("Game Draw.");
 										}
 									}
+									
+									if (board.getMode() == 1) {
+										pl1Score.setText("Score: " + updateP1Score(board.ggSOSCheck(rndmCoords[0], rndmCoords[1])));
+										gameStatusBar.setText("Player 2 turn.");
+										
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Computer 1 wins.");
+											}
+											else if (p1Points < p2Points) {
+												gameStatusBar.setText("Player 2 wins.");
+											}
+											else if (p1Points == p2Points) {
+												gameStatusBar.setText("Game draw.");
+											}
+										}
+									}
+									board.moveCountInc();
+									repaint();
 								}
-								board.moveCountInc();
-								repaint();
-							}	
+								else {
+									int[] rndmCoords = board.makeAutoOMove();
+									
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
+											gameStatusBar.setText("Computer 1 wins.");
+										}
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
+											gameStatusBar.setText("Player 2 turn.");
+										}
+									
+										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
+										gameStatusBar.setText("Game Draw.");
+										}
+									}
+									
+									if (board.getMode() == 1) {
+										pl1Score.setText("Score: " + updateP1Score(board.ggSOSCheck(rndmCoords[0], rndmCoords[1])));
+										gameStatusBar.setText("Player 2 turn.");
+										
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Computer 1 wins.");
+											}
+											else if (p1Points < p2Points) {
+												gameStatusBar.setText("Player 2 wins.");
+											}
+											else if (p1Points == p2Points) {
+												gameStatusBar.setText("Game draw.");
+											}
+										}
+									}
+									board.moveCountInc();
+									repaint();
+								}	
+							}
 						}
+						
 						//END						
 						//START: IF A HUMAN IS SELECTED FOR PLAYER 2						
 						else {
@@ -435,51 +468,84 @@ public class GUI extends JFrame {
 									repaint();
 								}
 							}
-			
-							//END								
-							//START: This if block uses a random int to randomly determine which move the computer should make							
+							
 							if (comTwo.isSelected()) {
 								randomMoveChance = random.nextInt(CHANCE);
 								if(randomMoveChance % 2 == 0) {
-									board.makeAutoSMove();
-								}
-								else {
-									board.makeAutoOMove();
-								}
-								//								
-								//This if block decides the status of a SIMPLE GAME by checking for SOS's and if the board is full 
-								if (board.getMode() == 0) {
-									if (board.sgSOSCheck(rowSelected, colSelected)) {
-										gameStatusBar.setText("Computer 2 wins.");
-									}
-									else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
-										gameStatusBar.setText("Player 1 turn.");
-									}
-							
-									if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
-										gameStatusBar.setText("Game Draw.");
-									}
-								}
-								//END
-								//START: This if block decides the status of a GENERAL GAME by checking for SOS's, if the board is full, and who has how many points
-								if (board.getMode() == 1) {
-									pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rowSelected, colSelected)));
-									gameStatusBar.setText("Player 1 turn.");
-									if (board.checkIfFull()) {
-										if (p1Points > p2Points) {
-											gameStatusBar.setText("Player 1 wins.");
-										}
-										else if (p1Points < p2Points) {
+									int[]rndmCoords = board.makeAutoSMove();
+									
+									//This if block decides the status of a SIMPLE GAME by checking for SOS's and if the board is full 
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Computer 2 wins.");
 										}
-										else if (p1Points == p2Points) {
-											gameStatusBar.setText("Game draw.");
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
+											gameStatusBar.setText("Player 1 turn.");
+										}
+								
+										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
+											gameStatusBar.setText("Game Draw.");
 										}
 									}
+									//END
+									//START: This if block decides the status of a GENERAL GAME by checking for SOS's, if the board is full, and who has how many points
+									if (board.getMode() == 1) {
+										pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rndmCoords[0], rndmCoords[1])));
+										gameStatusBar.setText("Player 1 turn.");
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Player 1 wins.");
+											}
+											else if (p1Points < p2Points) {
+												gameStatusBar.setText("Computer 2 wins.");
+											}
+											else if (p1Points == p2Points) {
+												gameStatusBar.setText("Game draw.");
+											}
+										}
+									}
+									//END
+									board.moveCountInc(); //Must increment the move counter so that it goes to the next players turn
+									repaint();
 								}
-								//END
-								board.moveCountInc(); //Must increment the move counter so that it goes to the next players turn
-								repaint();
+								
+								else {
+									int[]rndmCoords = board.makeAutoOMove();
+//									
+									//This if block decides the status of a SIMPLE GAME by checking for SOS's and if the board is full 
+									if (board.getMode() == 0) {
+										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
+											gameStatusBar.setText("Computer 2 wins.");
+										}
+										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
+											gameStatusBar.setText("Player 1 turn.");
+										}
+								
+										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
+											gameStatusBar.setText("Game Draw.");
+										}
+									}
+									//END
+									//START: This if block decides the status of a GENERAL GAME by checking for SOS's, if the board is full, and who has how many points
+									if (board.getMode() == 1) {
+										pl2Score.setText("Score: " + updateP2Score(board.ggSOSCheck(rndmCoords[0], rndmCoords[1])));
+										gameStatusBar.setText("Player 1 turn.");
+										if (board.checkIfFull()) {
+											if (p1Points > p2Points) {
+												gameStatusBar.setText("Player 1 wins.");
+											}
+											else if (p1Points < p2Points) {
+												gameStatusBar.setText("Computer 2 wins.");
+											}
+											else if (p1Points == p2Points) {
+												gameStatusBar.setText("Game draw.");
+											}
+										}
+									}
+									//END
+									board.moveCountInc(); //Must increment the move counter so that it goes to the next players turn
+									repaint();
+								}
 							}
 						}
 				}});

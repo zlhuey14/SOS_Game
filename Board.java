@@ -1,5 +1,7 @@
 package application;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 public class Board {
@@ -14,6 +16,8 @@ public class Board {
 	private int LEFT_BOARD_EDGE = 0;
 	private int BOTTOM_BOARD_EDGE = TOTALROWS - 1;
 	private int TOP_BOARD_EDGE = 0;
+	
+	FileWriter outFile;
 	
 	public Board() {
 		grid = new Cell[TOTALROWS][TOTALCOLS];
@@ -96,7 +100,7 @@ public class Board {
 			System.out.println("Row: " + row);
 			System.out.println("Col: " + col);
 		}
-		turn = 'S';
+		//turn = 'S';
 	}
 
 	public void makeOMove(int row, int col) {
@@ -116,8 +120,7 @@ public class Board {
 		rndmCoords[0] = random.nextInt(getRows());
 		rndmCoords[1] = random.nextInt(getCols());
 		if (grid[rndmCoords[0]][rndmCoords[1]] == Cell.O || grid[rndmCoords[0]][rndmCoords[1]] == Cell.S) {
-			rndmCoords[0] = random.nextInt(getRows());
-			rndmCoords[1] = random.nextInt(getCols());
+			makeAutoOMove();
 		}
 		makeOMove(rndmCoords[0], rndmCoords[1]);
 		return rndmCoords;
@@ -129,8 +132,7 @@ public class Board {
 			rndmCoords[0] = random.nextInt(getRows());
 			rndmCoords[1] = random.nextInt(getCols());
 			if (grid[rndmCoords[0]][rndmCoords[1]] == Cell.O || grid[rndmCoords[0]][rndmCoords[1]] == Cell.S) {
-				rndmCoords[0] = random.nextInt(getRows());
-				rndmCoords[1] = random.nextInt(getCols());
+				makeAutoSMove();
 			}
 			makeSMove(rndmCoords[0], rndmCoords[1]);
 			return rndmCoords;
@@ -344,5 +346,36 @@ public class Board {
 		}
 		System.out.println("checkIfFull = " + temp);
 		return temp;
+	}
+	
+	public void startFileWriter() {
+		try {
+			outFile = new FileWriter("game_recording.txt");
+			System.out.println("FW Started.");
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
+	
+	public void appendFileWriter(String text) {
+		try {
+			outFile.write(text + "\n");
+			System.out.println("FW just wrote ");
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+
+	}
+	
+	public void closeFileWriter() {
+		try {
+			outFile.close();
+			System.out.println("FW Closed.");
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
 	}
 }

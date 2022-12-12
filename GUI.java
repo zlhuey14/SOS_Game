@@ -55,6 +55,7 @@ public class GUI extends JFrame {
 		pack(); 
 		setTitle("SOS game");
 		setVisible(true);  
+		board.startFileWriter();
 	}
 	
 	public int getP1Score() {
@@ -253,9 +254,12 @@ public class GUI extends JFrame {
 							if (humOne.isSelected()) {
 								if (s1Btn.isSelected()) {
 									board.makeSMove(rowSelected, colSelected);
+									board.appendFileWriter("Player 1 placed 'S' at Row "+ rowSelected + ", Col " + colSelected);
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Player 1 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 											gameStatusBar.setText("Player 2 turn.");
@@ -263,6 +267,8 @@ public class GUI extends JFrame {
 									
 										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 
@@ -272,12 +278,18 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Player 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Player 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
 												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									}
@@ -286,16 +298,21 @@ public class GUI extends JFrame {
 								}
 								else if (o1Btn.isSelected()){
 									board.makeOMove(rowSelected, colSelected);
+									board.appendFileWriter("Player 1 placed 'O' at Row "+ rowSelected + ", Col " + colSelected);
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Player 1 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 											gameStatusBar.setText("Player 2 turn.");
 										}
 									
 										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
-										gameStatusBar.setText("Game Draw.");
+											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 	
@@ -306,12 +323,18 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Player 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Player 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
 												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									}
@@ -325,17 +348,21 @@ public class GUI extends JFrame {
 								randomMoveChance = random.nextInt(CHANCE);
 								if(randomMoveChance % 2 == 0) {
 									int[] rndmCoords = board.makeAutoSMove();
-									
+									board.appendFileWriter("Computer 1 placed 'S' at Row "+ rndmCoords[0] + ", Col " + rndmCoords[1]);
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Computer 1 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
 											gameStatusBar.setText("Player 2 turn.");
 										}
 									
 										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
-										gameStatusBar.setText("Game Draw.");
+											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 									
@@ -346,31 +373,42 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Computer 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Player 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
 												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									}
 									board.moveCountInc();
 									repaint();
 								}
+								
 								else {
 									int[] rndmCoords = board.makeAutoOMove();
-									
+									board.appendFileWriter("Computer 1 placed 'O' at Row "+ rndmCoords[0] + ", Col " + rndmCoords[1]);
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Computer 1 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
 											gameStatusBar.setText("Player 2 turn.");
 										}
 									
 										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
-										gameStatusBar.setText("Game Draw.");
+											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 									
@@ -381,12 +419,18 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Computer 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Player 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
 												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									}
@@ -402,9 +446,12 @@ public class GUI extends JFrame {
 							if (humTwo.isSelected()) {
 								if (s2Btn.isSelected()) {
 									board.makeSMove(rowSelected, colSelected);
+									board.appendFileWriter("Player 2 placed 'S' at Row "+ rowSelected + ", Col " + colSelected);
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Player 2 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 											gameStatusBar.setText("Player 1 turn.");
@@ -412,6 +459,8 @@ public class GUI extends JFrame {
 									
 										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 				
@@ -421,12 +470,18 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Player 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Player 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
 												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									
@@ -436,9 +491,12 @@ public class GUI extends JFrame {
 								}
 								else if (o2Btn.isSelected()){
 									board.makeOMove(rowSelected, colSelected);
+									board.appendFileWriter("Player 2 placed 'O' at Row "+ rowSelected + ", Col " + colSelected);
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Player 2 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rowSelected, colSelected))) {
 											gameStatusBar.setText("Player 1 turn.");
@@ -446,6 +504,8 @@ public class GUI extends JFrame {
 									
 										if (board.checkIfFull() && !board.sgSOSCheck(rowSelected, colSelected)) {
 											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 			
@@ -455,12 +515,18 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Player 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Player 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
-													gameStatusBar.setText("Game draw.");
+												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									}
@@ -473,11 +539,13 @@ public class GUI extends JFrame {
 								randomMoveChance = random.nextInt(CHANCE);
 								if(randomMoveChance % 2 == 0) {
 									int[]rndmCoords = board.makeAutoSMove();
-									
+									board.appendFileWriter("Computer 2 placed 'S' at Row "+ rndmCoords[0] + ", Col " + rndmCoords[1]);
 									//This if block decides the status of a SIMPLE GAME by checking for SOS's and if the board is full 
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Computer 2 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
 											gameStatusBar.setText("Player 1 turn.");
@@ -485,6 +553,8 @@ public class GUI extends JFrame {
 								
 										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 									//END
@@ -495,12 +565,18 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Player 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Computer 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
 												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									}
@@ -511,11 +587,13 @@ public class GUI extends JFrame {
 								
 								else {
 									int[]rndmCoords = board.makeAutoOMove();
-//									
+									board.appendFileWriter("Computer 2 placed 'O' at Row "+ rndmCoords[0] + ", Col " + rndmCoords[1]);
 									//This if block decides the status of a SIMPLE GAME by checking for SOS's and if the board is full 
 									if (board.getMode() == 0) {
 										if (board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Computer 2 wins.");
+											//dispose();
+											board.closeFileWriter();
 										}
 										else if (!(board.checkIfFull() && board.sgSOSCheck(rndmCoords[0], rndmCoords[1]))) {
 											gameStatusBar.setText("Player 1 turn.");
@@ -523,6 +601,8 @@ public class GUI extends JFrame {
 								
 										if (board.checkIfFull() && !board.sgSOSCheck(rndmCoords[0], rndmCoords[1])) {
 											gameStatusBar.setText("Game Draw.");
+											//dispose();
+											board.closeFileWriter();
 										}
 									}
 									//END
@@ -533,12 +613,18 @@ public class GUI extends JFrame {
 										if (board.checkIfFull()) {
 											if (p1Points > p2Points) {
 												gameStatusBar.setText("Player 1 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points < p2Points) {
 												gameStatusBar.setText("Computer 2 wins.");
+												//dispose();
+												board.closeFileWriter();
 											}
 											else if (p1Points == p2Points) {
 												gameStatusBar.setText("Game draw.");
+												//dispose();
+												board.closeFileWriter();
 											}
 										}
 									}
